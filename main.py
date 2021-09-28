@@ -12,8 +12,6 @@ import weather
 my_secret = os.environ['TOKEN']
 my_secret_api = os.environ['api_key']
 
-#client = discord.Client()
-
 intents = discord.Intents.default()
 intents.members = True
 client = commands.Bot(command_prefix="!", intents = intents)
@@ -34,22 +32,6 @@ def delete_course(index):
     del courses[index]
     db["courses"] = courses
 
-
-@client.event
-async def on_member_join(member): 
-                         
-    #guild = client.get_guild(814620705425195049)   #serverID
-    #channel = guild.get_channel(814620705794687017)   #channelID
-    
-    #testing server
-    guild = client.get_guild(892181610726838292)
-    channel = guild.get_channel(892181610726838295)
-
-    print('join info: ',member.name)
-
-    #welcome the member on server
-    await channel.send(f':computer: Welcome, its COMP216/SEC401 Group 2 {member.mention} ! :nerd:')
-    
 
 @client.event
 async def on_ready():
@@ -85,7 +67,7 @@ async def on_message(message):
       helpEmbed.add_field(name="--------------------------------------------------------------------------------------------------", value=":pushpin: Course commands", inline=False)
     
       helpEmbed.add_field(name="$list", value="Shows all courses in the list", inline=True)
-      helpEmbed.add_field(name="$add + link", value="Add a new course", inline=True)
+      helpEmbed.add_field(name="$add + course", value="Add a new course", inline=True)
       helpEmbed.add_field(name="del + number", value="Delete corresponding course (list starts in 0)", inline=True)
       helpEmbed.add_field(name="$random", value="Selects a random course", inline=True)
       helpEmbed.add_field(name="--------------------------------------------------------------------------------------------------", value=":pushpin: Weather commands", inline=False)
@@ -127,6 +109,7 @@ async def on_message(message):
         for x in courses:
           await message.channel.send(x)
 
+
     if msg.lower().startswith('$add'):
       course_link = msg.split("$add ",1)[1]
       update_courses("<"+course_link+">")
@@ -144,13 +127,6 @@ async def on_message(message):
       await message.channel.send(random.choice(db["courses"]))
 
     await client.process_commands(message)
-    
-    # if msg.lower().startswith('$list'):
-    #     courses = []
-    #     if "courses" in db.keys():
-    #         courses = db["courses"]
-    #     for x in courses:
-    #       await message.channel.send(x)
 
 @client.command()
 async def ping(ctx):
